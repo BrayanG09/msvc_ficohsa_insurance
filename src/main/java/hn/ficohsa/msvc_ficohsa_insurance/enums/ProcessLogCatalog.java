@@ -1,0 +1,16 @@
+package hn.ficohsa.msvc_ficohsa_insurance.enums;
+
+public enum ProcessLogCatalog {
+  INVALID_CREDENTIALS,
+  EXCEPTION,
+  USER_DISABLED,
+  INVALID_TOKEN,
+  FILTER_AUTH_EXCEPTION,
+  FIND_ALL_INSURANCE_EXCEPTION,
+  USERNAME_NOT_FOUND,
+  INSURANCE_NOT_FOUND,
+  INSURANCE_DISABLED,
+  DISABLED,
+  
+  ;
+}

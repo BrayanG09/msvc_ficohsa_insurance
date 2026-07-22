@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: msvc_ficohsa_insurance
+  datasource:
+    url: jdbc:postgresql://localhost:5439/insurance_db
+    username: ficohsa-seguros
+    password: ficohsa_seguros!10
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: ficohsa
+        format_sql: true
+
+    show-sql: true
+
+security:
+  jwt::
+    secret: fmC/WmOkdANkLoAy9erEsYs+B0hKejvJ2K1pGjMQ198=
+    expiration: 3600000 # 1 Hora en milisegundos

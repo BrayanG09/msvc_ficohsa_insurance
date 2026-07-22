@@ -1,0 +1,25 @@
+services:
+
+  postgres:
+
+    image: postgres:16
+
+    container_name: insurance-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: insurance_db
+      POSTGRES_USER: ficohsa-seguros
+      POSTGRES_PASSWORD: ficohsa_seguros!10
+
+    ports:
+      - "5439:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
