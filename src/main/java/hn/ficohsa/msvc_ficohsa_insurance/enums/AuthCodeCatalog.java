@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum AuthCodeCatalog implements CodeCatalog {
-  INVALID_CREDENTIALS("AUTH_7000", HttpStatus.BAD_REQUEST, "Usuario y/o contraseña incorrectos",
+  INVALID_CREDENTIALS("AUTH_7000", HttpStatus.UNAUTHORIZED, "Usuario y/o contraseña incorrectos",
             "Las credenciales proporcionadas son incorrectas."),
-  USER_DISABLED("AUTH_7001", HttpStatus.BAD_REQUEST, "Usuario y/o contraseña incorrectos",
+  USER_DISABLED("AUTH_7001", HttpStatus.UNAUTHORIZED, "Usuario y/o contraseña incorrectos",
             "Usuario no authorizado para realizar esta operación."),
   INVALID_TOKEN("AUTH_7002", HttpStatus.UNAUTHORIZED, "No estas autorizado para realizar esta solicitud.",
             "La solicitud requiere autenticación del usuario. El cliente debe proporcionar credenciales válidas para acceder al recurso solicitado."),
