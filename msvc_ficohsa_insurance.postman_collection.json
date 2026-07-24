@@ -1,0 +1,188 @@
+{
+  "info": {
+    "_postman_id": "15ad79dc-01dd-4626-9f55-2c6258310289",
+    "name": "msvc_ficohsa_insurance",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23484641",
+    "_collection_link": "https://go.postman.co/collection/23484641-15ad79dc-01dd-4626-9f55-2c6258310289?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Verify",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "try {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    if (response?.data?.token) {\r",
+                  "        pm.collectionVariables.set(\"jwt_token\", response.data.token);\r",
+                  "        console.log(\"Token almacenado correctamente.\");\r",
+                  "    } else {\r",
+                  "        console.log(\"La respuesta no contiene un token.\");\r",
+                  "    }\r",
+                  "} catch (error) {\r",
+                  "    console.log(\"Error procesando la respuesta: \", error);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"Brayan.10!\" // Brayan.10!\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_local}}/auth/verify",
+              "host": [
+                "{{url_local}}"
+              ],
+              "path": [
+                "auth",
+                "verify"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Products",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url_local}}/products?page=0&size=5",
+              "host": [
+                "{{url_local}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Quotation",
+      "item": [
+        {
+          "name": "Save",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"insuranceId\": \"cd298c73-e351-47da-846a-bce5af0ebd7a\",\r\n    \"applicantName\": \"Brayan Alvarez\",\r\n    \"applicantIdentity\": \"0803200000084\",\r\n    \"applicantEmail\": \"10brayanalvarez@gmail.com\",\r\n    \"applicantPhone\": \"94863990\",\r\n    \"vehicleYear\": 2010,\r\n    \"vehicleBrand\": \"Toyota\",\r\n    \"vehicleModel\": \"Yaris\",\r\n    \"vehicleValue\": 150000.00\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url_local}}/quotations",
+              "host": [
+                "{{url_local}}"
+              ],
+              "path": [
+                "quotations"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url_local",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "username",
+      "value": "brayan.alvarez"
+    },
+    {
+      "key": "jwt_token",
+      "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJicmF5YW4uYWx2YXJleiIsImlhdCI6MTc4NDg2NTMzMiwiZXhwIjoxNzg0ODY4OTMyfQ.2PCo9SuEPiJjd24qzuD1E1WPPDyAo6yj1Pd1JaqKpRM"
+    }
+  ]
+}
