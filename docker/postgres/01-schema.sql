@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS ficohsa.quotations
     user_id UUID NOT NULL,
     insurance_id UUID NOT NULL,
     applicant_name VARCHAR(150) NOT NULL,
-    applicant_identity VARCHAR(30) NOT NULL,
+    applicant_identity VARCHAR(13) NOT NULL,
     applicant_email VARCHAR(150),
     applicant_phone VARCHAR(30),
     vehicle_year INTEGER NOT NULL,
@@ -83,3 +83,28 @@ CREATE TABLE IF NOT EXISTS ficohsa.quotations
     CONSTRAINT fk_quotations_user FOREIGN KEY (user_id) REFERENCES ficohsa.users(user_id),
     CONSTRAINT fk_quotations_insurance FOREIGN KEY (insurance_id) REFERENCES ficohsa.insurances(insurance_id)
 );
+
+CREATE TABLE IF NOT EXISTS ficohsa.logs (
+    log_id UUID PRIMARY KEY,
+    project VARCHAR(100),
+    type VARCHAR(50),
+    process VARCHAR(100),
+    level VARCHAR(20),
+    code VARCHAR(50),
+    message VARCHAR(500),
+    description TEXT,
+    http_code INTEGER,
+    user_identifier VARCHAR(150),
+    metadata TEXT,
+    path VARCHAR(500),
+    exception_class VARCHAR(255),
+    exception_message TEXT,
+    exception_cause_class VARCHAR(255),
+    exception_cause_message TEXT,
+    exception_stack_trace TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_logs_created_at ON ficohsa.logs (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_logs_code ON ficohsa.logs (code);
+CREATE INDEX IF NOT EXISTS idx_logs_level ON ficohsa.logs (level);

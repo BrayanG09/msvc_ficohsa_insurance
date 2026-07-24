@@ -1,25 +1,43 @@
 services:
 
   postgres:
-
     image: postgres:16
-
     container_name: insurance-postgres
-
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: insurance_db
       POSTGRES_USER: ficohsa-seguros
-      POSTGRES_PASSWORD: ficohsa_seguros!10
-
+      POSTGRES_PASSWORD: "ficohsa_seguros!10"
     ports:
       - "5439:5432"
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
       - ./docker/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ficohsa-seguros -d insurance_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: insurance-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/insurance_db
+      SPRING_DATASOURCE_USERNAME: ficohsa-seguros
+      SPRING_DATASOURCE_PASSWORD: "ficohsa_seguros!10"
+      SECURITY_JWT_SECRET: fmC/WmOkdANkLoAy9erEsYs+B0hKejvJ2K1pGjMQ198=
+      SECURITY_JWT_EXPIRATION: 3600000
 
 volumes:
   postgres_data:

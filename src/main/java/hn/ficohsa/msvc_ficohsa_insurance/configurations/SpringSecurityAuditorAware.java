@@ -1,5 +1,6 @@
 package hn.ficohsa.msvc_ficohsa_insurance.configurations;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
@@ -15,7 +16,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
   public Optional<String> getCurrentAuditor() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication == null ||
+    if (Objects.isNull(authentication) ||
         !authentication.isAuthenticated() ||
         authentication instanceof AnonymousAuthenticationToken) {
       return Optional.of("SYSTEM");

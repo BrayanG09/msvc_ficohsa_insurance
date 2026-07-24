@@ -28,13 +28,15 @@ import hn.ficohsa.msvc_ficohsa_insurance.dtos.common.ResponseDTO;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.AuthCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.ResponseCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.exceptions.FicohsaInsuranceException;
+import hn.ficohsa.msvc_ficohsa_insurance.services.definitions.LogService;
 import lombok.RequiredArgsConstructor;
 
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-  @Override
+  private final LogService logService;
 
+  @Override
   protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
       HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     ResponseCodeCatalog codeCatalog = ResponseCodeCatalog.INVALID_PARAMETERS;
@@ -52,7 +54,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseDTO<HashMap<Object, Object>> response = ResponseDTO.error(codeCatalog, new HashMap<>())
         .withCustomMessage(messageError);
 
-    return ResponseEntity.status(codeCatalog.getHttpCode())
+    return ResponseEntity
+        .status(codeCatalog.getHttpCode())
         .body(response);
   }
 
@@ -63,7 +66,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseDTO<HashMap<Object, Object>> response = ResponseDTO.error(codeCatalog, new HashMap<>())
         .withCustomMessage(ex.getMessage());
 
-    return ResponseEntity.status(codeCatalog.getHttpCode())
+    return ResponseEntity
+        .status(codeCatalog.getHttpCode())
         .body(response);
   }
 
@@ -122,7 +126,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(FicohsaInsuranceException.class)
   public ResponseEntity<Object> handleFicohsaInsuranceException(FicohsaInsuranceException ex) {
-    // TODO: Almacenar log
+    if (!(ex.getCodeCatalog() instanceof AuthCodeCatalog)) {
+      this.logService.saveAsync(ex);
+    }
 
     ResponseDTO<HashMap<Object, Object>> response = ResponseDTO.error(ex.getCodeCatalog(), new HashMap<>());
 

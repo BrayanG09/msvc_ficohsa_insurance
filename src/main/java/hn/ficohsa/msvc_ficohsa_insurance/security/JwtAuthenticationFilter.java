@@ -1,6 +1,7 @@
 package hn.ficohsa.msvc_ficohsa_insurance.security;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.AuthCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.LevelLogCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.ProcessLogCatalog;
+import hn.ficohsa.msvc_ficohsa_insurance.enums.ProjectsCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.TypeLogCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.exceptions.FicohsaInsuranceException;
 import hn.ficohsa.msvc_ficohsa_insurance.services.impls.CustomUserDetailsService;
@@ -36,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-    if (header == null || !header.startsWith("Bearer ")) {
+    if (Objects.isNull(header) || !header.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
       return;
     }
@@ -45,11 +47,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       String token = header.substring(7);
       String username = this.jwtService.extractUsername(token);
 
-      if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication())) {
         UserDetails user = this.userDetailsService.loadUserByUsername(username);
 
         if (!this.jwtService.isTokenValid(token, user)) {
           throw FicohsaInsuranceException.builder()
+              .project(ProjectsCatalog.MSVC_FICOHSA_INSURANCE)
               .type(TypeLogCatalog.AUTH.name())
               .process(ProcessLogCatalog.INVALID_TOKEN.name())
               .codeCatalog(AuthCodeCatalog.INVALID_TOKEN)
@@ -73,6 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       this.handlerExceptionResolver.resolveException(request, response, null, e);
     } catch (JwtException | IllegalArgumentException e) {
       FicohsaInsuranceException exception = FicohsaInsuranceException.builder()
+          .project(ProjectsCatalog.MSVC_FICOHSA_INSURANCE)
           .type(TypeLogCatalog.AUTH.name())
           .process(ProcessLogCatalog.INVALID_TOKEN.name())
           .codeCatalog(AuthCodeCatalog.INVALID_TOKEN)

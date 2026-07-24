@@ -15,6 +15,7 @@ import hn.ficohsa.msvc_ficohsa_insurance.entities.User;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.AuthCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.LevelLogCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.ProcessLogCatalog;
+import hn.ficohsa.msvc_ficohsa_insurance.enums.ProjectsCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.QuotationCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.QuotationStatus;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.TypeLogCatalog;
@@ -95,6 +96,7 @@ public class QuotationServiceImpl implements QuotationService {
           .quotationId(savedQuotation.getQuotationId())
           .build();
     } catch (FicohsaInsuranceException e) {
+      e.setProject(ProjectsCatalog.MSVC_FICOHSA_INSURANCE);
       e.setType(TypeLogCatalog.QUOTATION.name());
       e.setUserIdentifier(username);
 
@@ -102,6 +104,7 @@ public class QuotationServiceImpl implements QuotationService {
     } catch (Exception e) {
       throw FicohsaInsuranceException.builder()
           .userIdentifier(username)
+          .project(ProjectsCatalog.MSVC_FICOHSA_INSURANCE)
           .type(TypeLogCatalog.QUOTATION.name())
           .process(ProcessLogCatalog.EXCEPTION.name())
           .codeCatalog(QuotationCodeCatalog.EXCEPTION_CREATE)

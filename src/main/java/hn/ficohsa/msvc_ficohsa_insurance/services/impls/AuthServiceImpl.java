@@ -12,6 +12,7 @@ import hn.ficohsa.msvc_ficohsa_insurance.dtos.auth.AuthResponseDTO;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.AuthCodeCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.LevelLogCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.ProcessLogCatalog;
+import hn.ficohsa.msvc_ficohsa_insurance.enums.ProjectsCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.enums.TypeLogCatalog;
 import hn.ficohsa.msvc_ficohsa_insurance.exceptions.FicohsaInsuranceException;
 import hn.ficohsa.msvc_ficohsa_insurance.security.JwtService;
@@ -44,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
       throw FicohsaInsuranceException.builder()
           .userIdentifier(request.getUsername())
           .type(TypeLogCatalog.AUTH.name())
+          .project(ProjectsCatalog.MSVC_FICOHSA_INSURANCE)
           .process(ProcessLogCatalog.INVALID_CREDENTIALS.name())
           .codeCatalog(AuthCodeCatalog.INVALID_CREDENTIALS)
           .level(LevelLogCatalog.WARN)

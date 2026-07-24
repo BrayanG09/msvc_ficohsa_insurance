@@ -35,7 +35,7 @@ public class Quotation extends AuditEntity {
     @Column(name = "applicant_name", nullable = false, length = 150)
     private String applicantName;
 
-    @Column(name = "applicant_identity", nullable = false, length = 30)
+    @Column(name = "applicant_identity", nullable = false, length = 13)
     private String applicantIdentity;
 
     @Column(name = "applicant_email", length = 150)
